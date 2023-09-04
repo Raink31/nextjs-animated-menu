@@ -3,12 +3,20 @@
 import styles from '@/app/header/style.module.scss'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion';
-import { opacity } from './anim'
-import { useState } from 'react';
+import { opacity, background } from './anim'
+import { useEffect, useState } from 'react';
 import Nav from './nav/page'
+import { usePathname } from 'next/navigation';
+
 export default function NavBar() {
 
-    const [isActive, setIsActive] = useState(false)
+    const [isActive, setIsActive] = useState(false);
+    const pathname = usePathname();
+
+    useEffect( () => {
+        setIsActive(false);
+    }, [pathname])
+
     return (
         <header className='p-[15px] fixed w-full box-border bg-[#f4f0ea] sm:p-[20px]'>
             <div className="bar flex items-center justify-center text-[12px] uppercase relative sm:text-[15px]">
@@ -28,6 +36,7 @@ export default function NavBar() {
                     </div>
                 </motion.div>
             </div>
+            <motion.div variants={background} initial='initial' animate={isActive ? "open" : "closed"} className={`${styles.background} h-full w-full absolute bg-black opacity-50 left-0 top-full`}></motion.div>
             <AnimatePresence mode='wait'>
                 {isActive && <Nav />}
             </AnimatePresence>
